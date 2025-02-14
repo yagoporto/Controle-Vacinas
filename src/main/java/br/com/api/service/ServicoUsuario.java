@@ -99,7 +99,7 @@ public class ServicoUsuario {
                 //busca todos os contatos cadastrados no array list
                 //é necessário realizar um cast explicito para converter o retorno 
                 //do servicoUsuario
-                ArrayList<Usuario> usuarios = DAOUsuario.consultarTodosUsuarios();
+                ArrayList<Usuario> usuarios = DAOUsuario.consultarTodos();
 
                 //se o arraylist estiver vazio
                 if (usuarios.isEmpty()) {
@@ -130,7 +130,7 @@ public class ServicoUsuario {
     
                     //envia o objeto para ser inserido no banco de dados pelo DAO 
                     //e armazena a quantidade de linhas alteradas
-                    int qtdeLinhasAlteradas = DAOUsuario.atualizarUsuario(usuario);
+                    int qtdeLinhasAlteradas = DAOUsuario.atualizar(usuario);
     
                     //se a quantidade de linhas alteradas for maior que 0 significa se existia o usuario no banco de dados
                     if (qtdeLinhasAlteradas > 0){

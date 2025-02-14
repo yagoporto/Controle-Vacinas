@@ -48,7 +48,7 @@ public class DAOUsuario {
     //realiza a consulta de todos os usuarios cadastrados na tabela
     //Entrada: Nenhum
     //Retorno: Tipo ArrayList<Usuario>. Retorna uma lista de objetos Usuarios
-    public static ArrayList<Usuario> consultarTodosUsuarios() throws SQLException{
+    public static ArrayList<Usuario> consultarTodos() throws SQLException{
         //cria o array list pra receber os dados dos usuarios que retornarao do banco de dados
         ArrayList<Usuario> lista = new ArrayList<Usuario>();
 
@@ -137,7 +137,7 @@ public class DAOUsuario {
     //atualiza um usuario pelo ID
     //Entrada: Tipo Usuario. Ojbeto usuario a ser atualizado
     //Retorno: Tipo int. Retorna a quatidade de linhas excluidas
-    public static int atualizarUsuario(Usuario usuario) throws SQLException{
+    public static int atualizar(Usuario usuario) throws SQLException{
         //define o sql 
         String sql = "UPDATE usuario SET nome = ?, email = ? WHERE id = ?";
 
