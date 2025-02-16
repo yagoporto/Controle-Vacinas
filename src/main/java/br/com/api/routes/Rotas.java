@@ -17,6 +17,9 @@ public class Rotas {
         Spark.put("/alterar/:id", ServicoUsuario.alterarUsuario());
         Spark.delete("/excluir/:id", ServicoUsuario.excluirUsuario());
         
+        Spark.get("/consultar/compras/usuario/:id", ServicoUsuario.consultarComprasPorUsuarioIdv1());
+        //Spark.get("/consultar/compras/usuario/:id", ServicoUsuario.consultarComprasPorUsuarioIdv2());
+        
         //TO DO: Para criar novas rotas, basta adicionar novas linhas seguindo o padrao abaixo, 
         //onde XXXX e o metodo http (post, get, put ou delete), yyyyyy a url que define a rota
         //e ZZZZZ o metodo a ser executado quando a rota for acionada

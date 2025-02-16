@@ -1,5 +1,6 @@
 package br.com.api.dao;
 
+import br.com.api.dto.DTOUsuarioPedido;
 import br.com.api.model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -154,6 +155,59 @@ public class DAOUsuario {
 
             //retorna a quantidade de linhas atualizadas
             return qtdeLinhasAlteradas;
+        }
+    }
+
+    public static ArrayList<DTOUsuarioPedido> consultarComprasPorUsuario(int id) throws SQLException{
+        //cria o array list pra receber os dados da consulta
+        ArrayList<DTOUsuarioPedido> listaClientePedido = new ArrayList<DTOUsuarioPedido>();
+
+        //define o sql 
+        String sql = """
+            SELECT 	p.id AS id_pedido,
+                    u.nome as nome_cliente,
+                    u.email,
+                    p.data_compra,
+                    ip.qtde,
+                    pr.descricao as nome_produto,
+                    pr.preco_unitario,
+                    ROUND((pr.preco_unitario * ip.qtde),2) as total_produto
+            FROM pedido AS p
+            INNER JOIN usuario AS u ON u.id = p.id_usuario
+            INNER JOIN item_pedido AS ip ON ip.id_pedido = p.id
+            INNER JOIN produto AS pr ON pr.id = ip.id_produto
+            WHERE u.id = ?
+        """;
+
+        try (
+            PreparedStatement comando = conexao.prepareStatement(sql) //cria o comando para receber sql dinamico
+        ) {
+            //substitui a ? pelo codigo do usuario
+            comando.setInt(1, id);
+
+            //executa o comando sql
+            ResultSet resultado = comando.executeQuery();
+
+            //verifica se tem algum resultado retornado pelo banco
+            while (resultado.next()) {
+                //cria um novo objeto usuario
+                DTOUsuarioPedido clientePedido = new DTOUsuarioPedido();
+
+                clientePedido.idPedido = resultado.getInt("id_pedido");
+                clientePedido.nomeCliente = resultado.getString("nome_cliente");
+                clientePedido.email = resultado.getString("email");
+                clientePedido.dataCompra = resultado.getString("data_compra");
+                clientePedido.qtde = resultado.getInt("qtde");
+                clientePedido.descricaoProduto = resultado.getString("nome_produto");
+                clientePedido.valorProduto = resultado.getFloat("preco_unitario");
+                clientePedido.valorTotalProduto = resultado.getFloat("total_produto");
+
+                //adiciona o objeto clientePedido no array list
+                listaClientePedido.add(clientePedido);
+            } 
+                
+            //retorna o objeto pessoa
+            return listaClientePedido;
         }
     }
 }
