@@ -1,17 +1,34 @@
 package br.com.api.service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.api.config.Conexao;
 import br.com.api.dao.DAOUsuario;
+import br.com.api.dto.DTOUsuarioPedido;
 import br.com.api.model.Usuario;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class ServicoUsuario {
-     // Método para lidar com a rota de adicionar usuário
+
+    static class UsuarioPedido{
+        public int idPedido;
+        public String nomeCliente;
+        public String email;
+        public String dataCompra;
+        public int qtde;
+        public String descricaoProduto;
+        public float valorProduto;
+        public float valorTotalProduto;
+    }
+
+    // Método para lidar com a rota de adicionar usuário
     public static Route cadastrarUsuario() {
         return new Route() {
             @Override
@@ -182,5 +199,118 @@ public class ServicoUsuario {
             }
         };
     }
-        
+
+    public static Route consultarComprasPorUsuarioIdv1() {
+        return new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                //classe para converter objeto para json
+                ObjectMapper converteJson = new ObjectMapper();
+
+                int id;
+
+                try {
+                    //extrai o parametro id da URL (header http), e converte para inteiro
+                    id = Integer.parseInt(request.params(":id"));
+
+                    //busca os pedidos do usuario
+                    ArrayList<DTOUsuarioPedido> listaCompras = DAOUsuario.consultarComprasPorUsuario(id);
+
+                    if (listaCompras != null) {
+                        //defini o http status code
+                        response.status(200); // 200 OK
+
+                        //retorna o objeto encontrado no formato json
+                        return converteJson.writeValueAsString(listaCompras);
+                    } else {
+                        //defini o http status code
+                        response.status(209); // 209 Consulta realizada com sucesso mas nao tem nenhum registro no banco
+                        return "{\"message\": \"Nenhum pedido encontrado para este usuário\"}" ;
+                    }
+                } catch (NumberFormatException e) {
+                    //defini o http status code
+                    response.status(400); // 400 Requisicao incorreta, foi fornecido um id que nao pode ser convertido para inteiro
+                    return "{\"message\": \"ID fornecido está no formato incorreto.\"}" ;
+                }
+            }
+        };
+    }
+
+    
+    public static Route consultarComprasPorUsuarioIdv2() {
+        return new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                // Classe para converter objeto para JSON
+                ObjectMapper converteJson = new ObjectMapper();
+
+                int id;
+
+                // Define o SQL
+                String sql = """
+                    SELECT 	p.id AS id_pedido,
+                            u.nome as nome_cliente,
+                            u.email,
+                            p.data_compra,
+                            ip.qtde,
+                            pr.descricao as nome_produto,
+                            pr.preco_unitario,
+                            ROUND((pr.preco_unitario * ip.qtde),2) as total_produto
+                    FROM pedido AS p
+                    INNER JOIN usuario AS u ON u.id = p.id_usuario
+                    INNER JOIN item_pedido AS ip ON ip.id_pedido = p.id
+                    INNER JOIN produto AS pr ON pr.id = ip.id_produto
+                    WHERE u.id = ?
+                """;
+
+                try (
+                    Connection conexao = Conexao.getConexao(); 
+                    PreparedStatement comando = conexao.prepareStatement(sql)
+                ) {
+                    // Extrai o parâmetro id da URL (header HTTP) e converte para inteiro
+                    id = Integer.parseInt(request.params(":id"));
+
+                    // Substitui a ? pelo código do usuário
+                    comando.setInt(1, id);
+
+                    // Executa o comando SQL
+                    ResultSet resultado = comando.executeQuery();
+
+                    // Lista para armazenar os pedidos
+                    ArrayList<UsuarioPedido> listaPedidos = new ArrayList<UsuarioPedido>(); 
+
+                    while (resultado.next()) {
+                        UsuarioPedido usuarioPedido = new UsuarioPedido();
+                        usuarioPedido.idPedido = resultado.getInt("id_pedido");
+                        usuarioPedido.nomeCliente = resultado.getString("nome_cliente");
+                        usuarioPedido.email = resultado.getString("email");
+                        usuarioPedido.dataCompra = resultado.getString("data_compra");
+                        usuarioPedido.qtde = resultado.getInt("qtde");
+                        usuarioPedido.descricaoProduto = resultado.getString("nome_produto");
+                        usuarioPedido.valorProduto = resultado.getFloat("preco_unitario");
+                        usuarioPedido.valorTotalProduto = resultado.getFloat("total_produto");
+
+                        // Adiciona o pedido na lista
+                        listaPedidos.add(usuarioPedido);
+                    }
+
+                    if (!listaPedidos.isEmpty()) {
+                        // Define o HTTP status code
+                        response.status(200); // 200 OK
+
+                        // Retorna a lista de pedidos no formato JSON
+                        return converteJson.writeValueAsString(listaPedidos);
+                    } else {
+                        // Define o HTTP status code
+                        response.status(209); // 209 Consulta realizada com sucesso mas não tem nenhum registro no banco
+                        return "{\"message\": \"Nenhum pedido encontrado para este usuário\"}";
+                    }
+                } catch (NumberFormatException e) {
+                    // Define o HTTP status code
+                    response.status(400); // 400 Requisição incorreta, foi fornecido um ID que não pode ser convertido para inteiro
+                    return "{\"message\": \"ID fornecido está no formato incorreto.\"}";
+                }
+            }
+        };
+    }
 }
