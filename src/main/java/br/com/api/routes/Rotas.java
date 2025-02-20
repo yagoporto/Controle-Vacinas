@@ -1,6 +1,7 @@
 package br.com.api.routes;
 
 import br.com.api.routes.Rotas;
+import br.com.api.service.ServicoImunizacao;
 import br.com.api.service.ServicoUsuario;
 
 import spark.Spark; 
@@ -15,7 +16,16 @@ public class Rotas {
         Spark.get("/consultar", ServicoUsuario.consultarTodosUsuarios());
         Spark.put("/alterar/:id", ServicoUsuario.alterarUsuario());
         Spark.delete("/excluir/:id", ServicoUsuario.excluirUsuario());
-
+        
+        //Rotas Imunização
+        Spark.post("/imunizacao/inserir", ServicoImunizacao.cadastrarImunizacao());
+        Spark.put("/imunizacao/alterar/:id", ServicoImunizacao.alterarImunizacao());
+        Spark.delete("/imunizacao/excluir/:id", ServicoImunizacao.excluirImunizacao());
+        Spark.delete("/imunizacao/excluir/paciente/:id", ServicoImunizacao.excluirTodos());
+        Spark.get("/imunizacao/consultar/:id", ServicoImunizacao.consultarImunizacaoId());
+        Spark.get("/imunizacao/consultar", ServicoImunizacao.consultarTodasImunizacoes());
+        Spark.get("/imunizacao/consultar/paciente/:id", ServicoImunizacao.consultarImunizacaoPorPaciente());
+        Spark.get("/imunizacao/consultar/paciente/:id/aplicacao/:dt_ini/:dt_fim", ServicoImunizacao.consultarImunizacaoPorIntervalo());
 
         
         //TO DO: Para criar novas rotas, basta adicionar novas linhas seguindo o padrao abaixo, 
@@ -44,5 +54,4 @@ public class Rotas {
     //         }
     //     };
     // }
-   
 }
