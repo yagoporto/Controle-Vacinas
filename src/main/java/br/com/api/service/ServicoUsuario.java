@@ -177,7 +177,7 @@ public class ServicoUsuario {
             public Object handle(Request request, Response response) throws Exception {
                 try {     
                     //extrai o parametro id da URL (header http), e converte para inteiro
-                    int id = Integer.parseInt(request.params(":id"));
+                    int id = Integer.parseInt(request.queryParams("id"));
                     
                     //envia o id a ser excluida para o DAO e recebe a quantidade de linhas excluidas
                     int linhasExcluidas = DAOUsuario.excluirPorID(id);
@@ -195,7 +195,6 @@ public class ServicoUsuario {
                     response.status(400);
                     return "{\"message\": \"ID fornecido está no formato incorreto.\"}" ;
                 }
-                                    
             }
         };
     }

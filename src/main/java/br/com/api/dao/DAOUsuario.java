@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DAOUsuario {
     //atributo utilizado para receber a conexao criada no metodo main
     public static Connection conexao = null;
- 
+
     //realiza a insercao dos dados no banco de dados
     //Entrada: Tipo Usuario. Recebe o objeto Usuario 
     //Retorno: Tipo int. Retorna o Id da chave primaria criado no banco de dados

@@ -1,14 +1,14 @@
 package br.com.api;
 
-import spark.Spark;
+import spark.*;
 
 import java.sql.Connection;
 
 import br.com.api.config.Conexao;
-import br.com.api.dao.DAOPaciente;
-// import br.com.api.dao.DAOUsuario;
-// import br.com.api.routes.Rotas;
-import br.com.api.routes.RotasPaciente;
+import br.com.api.dao.DAOImunizacao;
+
+//import br.com.api.dao.DAOUsuario;
+import br.com.api.routes.Rotas;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -22,8 +22,9 @@ public class Main {
             Connection conexao = Conexao.getConexao(); 
 
             //Atribui a conexao criada, no atributo da classe DAOUsuario
-            // DAOUsuario.conexao = conexao;
-            DAOPaciente.conexao = conexao;
+            //DAOUsuario.conexao = conexao;
+           // DAOPaciente.conexao = conexao;
+            DAOImunizacao.conexao = conexao;
             //TO DO: atribuir a mesma conexao nas demais classes DAO caso existam
 
             Spark.port(8080);
@@ -59,8 +60,8 @@ public class Main {
             });
 
             //executa o metodo para cadastrar as rotas no spark
-            // Rotas.processarRotas();
-            RotasPaciente.processarRotasPaciente();
+            Rotas.processarRotas();
+            //RotasPaciente.processarRotasPaciente();
         } catch (Exception e) {
             e.printStackTrace();
         }
