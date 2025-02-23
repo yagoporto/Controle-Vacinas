@@ -71,5 +71,5 @@ Use **Thunder Client**, **Postman** ou **cURL** para testar os endpoints. Exempl
 Este projeto está sob a licença MIT. Sinta-se à vontade para contribuir!
 
 ---
-Desenvolvido por [Seu Nome](https://github.com/seu-usuario) 🚀
+Desenvolvido por  [Joseph da costa ribeiro](https://github.com/josephDcostaR), [Yago Porto](https://github.com/yagoporto), [Alexandro Sousa](https://github.com/alexandrosousadev), [Raine Rocha](https://github.com/rainerocha)  🚀
 

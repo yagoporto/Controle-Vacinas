@@ -1,0 +1,30 @@
+# Compilação Java
+*.class
+
+# Diretórios do Maven
+.mvn/
+target/
+
+# Diretórios do Gradle
+.gradle/
+build/
+
+# Arquivos do Eclipse/IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+.classpath
+.project
+.settings/
+
+# Logs e arquivos temporários
+*.log
+hs_err_pid*
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
