@@ -131,7 +131,7 @@ public class DAOPaciente {
 
     public static int atualizar(Paciente paciente) throws SQLException{
         //define o sql 
-        String sql = "UPDATE paciente SET nome = ?, cpf = ? WHERE id = ?";
+        String sql = "UPDATE paciente SET nome = ?, cpf = ?, sexo = ?, data_nascimento = ? WHERE id = ?";
 
         try (
             PreparedStatement comando = conexao.prepareStatement(sql) //cria a conexao para receber o sql dinamico
@@ -141,6 +141,7 @@ public class DAOPaciente {
             comando.setString(2, paciente.getCpf());
             comando.setString(3, paciente.getSexo().name());
             comando.setDate(4, new java.sql.Date(paciente.getData_nascimento().getTime()));
+            comando.setLong(5, paciente.getId());
 
             //executa a atualizacao e armazena o retorno do banco com a quantidade de linhas atualizadas
             int qtdeLinhasAlteradas = comando.executeUpdate();

@@ -1,14 +1,16 @@
 package br.com.api;
 
-import spark.*;
+import spark.Spark;
 
 import java.sql.Connection;
 
 import br.com.api.config.Conexao;
 import br.com.api.dao.DAOImunizacao;
-
-//import br.com.api.dao.DAOUsuario;
-import br.com.api.routes.Rotas;
+import br.com.api.dao.DAOPaciente;
+import br.com.api.estatisticas.EstatisticasController;
+import br.com.api.routes.RotasImunizacao;
+import br.com.api.routes.RotasPaciente;
+import br.com.api.routes.RotasVacina;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,13 +22,10 @@ public class Main {
         try {
             //obtem uma conexao valida com o banco de dados
             Connection conexao = Conexao.getConexao(); 
-
-            //Atribui a conexao criada, no atributo da classe DAOUsuario
-            //DAOUsuario.conexao = conexao;
-           // DAOPaciente.conexao = conexao;
+           
+            DAOPaciente.conexao = conexao;
             DAOImunizacao.conexao = conexao;
-            //TO DO: atribuir a mesma conexao nas demais classes DAO caso existam
-
+            
             Spark.port(8080);
 
             //Habilitar CORS
@@ -60,8 +59,12 @@ public class Main {
             });
 
             //executa o metodo para cadastrar as rotas no spark
-            Rotas.processarRotas();
-            //RotasPaciente.processarRotasPaciente();
+            RotasPaciente.processarRotasPaciente();
+            RotasImunizacao.processarRotas();
+            RotasVacina.processarRotas();
+
+            // Registra as rotas de estatísticas
+            EstatisticasController.init();
         } catch (Exception e) {
             e.printStackTrace();
         }

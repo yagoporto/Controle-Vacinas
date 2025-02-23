@@ -110,4 +110,3 @@ public class Imunizacao {
         this.profissional_aplicador = profissional_aplicador;
     }
 }
-
