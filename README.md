@@ -1,5 +1,7 @@
 # 📌 Sistema de Gerenciamento de Vacinação
 
+## Frontend em desenvolvimento
+
 ## 🏥 Sobre o Projeto
 Este é um sistema de gerenciamento de vacinação desenvolvido em Java utilizando **Spark** como framework para a API REST e **MySQL** como banco de dados. O sistema permite o cadastro, consulta e gerenciamento de pacientes, vacinas e imunizações.
 
