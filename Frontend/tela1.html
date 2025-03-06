@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Vacinas</title>
+    <link rel="stylesheet" href="./CSS/styles.css">
+</head>
+<body>
+    <header><button class="login-button" onclick="openModal()" style="margin-top: 40rem;">🔑</button>
+
+        <div class="modal" id="loginModal">
+            <div class="login-box">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Login</h2>
+                <div class="user-box">
+                    <input type="text" required>
+                    <label>Usuário</label>
+                </div>
+                <div class="user-box">
+                    <input type="password" required>
+                    <label>Senha</label>
+                </div>
+                <a href="#" onclick="showError()" style="color: aliceblue;">
+                    Entrar
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
+                <p id="error-message" style="color: red; display: none;">Essa etapa ainda está em desenvolvimento.</p>
+            </div>
+        </div>
+        <h1>Gerenciamento de Vacinas Familiares</h1>
+    </header>
+    <main>
+        <section id="calendario-vacinal">
+            <h2>Calendário Vacinal</h2>
+            <ul id="lista-calendario"></ul>
+        </section>
+        <section id="cadastro-vacinas">
+            <h2>Cadastro de Vacinas</h2>
+            <form id="form-vacina">
+                <label for="nome-integrante">Nome do Integrante:</label>
+                <input type="text" id="nome-integrante" required>
+                
+                <label for="vacina">Vacina e Dose:</label>
+                <select id="vacina" required>
+                    
+                    <!-- As opções serão geradas dinamicamente -->
+                </select>
+                
+                <label for="data-aplicacao">Data de Aplicação:</label>
+                <input type="date" id="data-aplicacao" required>
+                
+                <button type="submit">Cadastrar Vacina</button>
+            </form>
+            <ul id="lista-vacinas"></ul>
+        </section>
+    </main>
+    <script src="./JS/script.js"></script>
+    <script src="./JS/jsa.js"></script>  
+</body>
+</html>
